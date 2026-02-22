@@ -15,6 +15,8 @@ class ProductModel {
   final String? categoryId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final double? priceAfetDiscount;
+  final int? dicountpercent;
 
   ProductModel({
     required this.id,
@@ -30,6 +32,8 @@ class ProductModel {
     this.categoryId,
     this.createdAt,
     this.updatedAt,
+    this.priceAfetDiscount,
+    this.dicountpercent,
   });
 
   // Helper constructor for demo/mock data compatibility
@@ -54,6 +58,8 @@ class ProductModel {
     categoryId: null,
     createdAt: null,
     updatedAt: null,
+    priceAfetDiscount: priceAfetDiscount,
+    dicountpercent: dicountpercent,
   );
 
   // Factory constructor to create ProductModel from JSON (Supabase)
@@ -99,10 +105,14 @@ class ProductModel {
       'updated_at': updatedAt?.toIso8601String(),
     };
   }
+
+  // Backward compatibility getters
+  String? get image => imageUrl;
+  String? get brandName => brand;
 }
 
 List<ProductModel> demoPopularProducts = [
-  ProductModel(
+  ProductModel.fromMock(
     image: productDemoImg1,
     title: "Mountain Warehouse for Women",
     brandName: "Lipsy london",
@@ -110,13 +120,13 @@ List<ProductModel> demoPopularProducts = [
     priceAfetDiscount: 420,
     dicountpercent: 20,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: productDemoImg4,
     title: "Mountain Beta Warehouse",
     brandName: "Lipsy london",
     price: 800,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: productDemoImg5,
     title: "FS - Nike Air Max 270 Really React",
     brandName: "Lipsy london",
@@ -124,7 +134,7 @@ List<ProductModel> demoPopularProducts = [
     priceAfetDiscount: 390.36,
     dicountpercent: 40,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: productDemoImg6,
     title: "Green Poplin Ruched Front",
     brandName: "Lipsy london",
@@ -132,7 +142,7 @@ List<ProductModel> demoPopularProducts = [
     priceAfetDiscount: 1200.8,
     dicountpercent: 5,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/tXyOMMG.png",
     title: "Green Poplin Ruched Front",
     brandName: "Lipsy london",
@@ -140,7 +150,7 @@ List<ProductModel> demoPopularProducts = [
     priceAfetDiscount: 390.36,
     dicountpercent: 40,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/h2LqppX.png",
     title: "white satin corset top",
     brandName: "Lipsy london",
@@ -150,7 +160,7 @@ List<ProductModel> demoPopularProducts = [
   ),
 ];
 List<ProductModel> demoFlashSaleProducts = [
-  ProductModel(
+  ProductModel.fromMock(
     image: productDemoImg5,
     title: "FS - Nike Air Max 270 Really React",
     brandName: "Lipsy london",
@@ -158,7 +168,7 @@ List<ProductModel> demoFlashSaleProducts = [
     priceAfetDiscount: 390.36,
     dicountpercent: 40,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: productDemoImg6,
     title: "Green Poplin Ruched Front",
     brandName: "Lipsy london",
@@ -166,7 +176,7 @@ List<ProductModel> demoFlashSaleProducts = [
     priceAfetDiscount: 1200.8,
     dicountpercent: 5,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: productDemoImg4,
     title: "Mountain Beta Warehouse",
     brandName: "Lipsy london",
@@ -176,7 +186,7 @@ List<ProductModel> demoFlashSaleProducts = [
   ),
 ];
 List<ProductModel> demoBestSellersProducts = [
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/tXyOMMG.png",
     title: "Green Poplin Ruched Front",
     brandName: "Lipsy london",
@@ -184,7 +194,7 @@ List<ProductModel> demoBestSellersProducts = [
     priceAfetDiscount: 390.36,
     dicountpercent: 40,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/h2LqppX.png",
     title: "white satin corset top",
     brandName: "Lipsy london",
@@ -192,7 +202,7 @@ List<ProductModel> demoBestSellersProducts = [
     priceAfetDiscount: 1200.8,
     dicountpercent: 5,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: productDemoImg4,
     title: "Mountain Beta Warehouse",
     brandName: "Lipsy london",
@@ -202,7 +212,7 @@ List<ProductModel> demoBestSellersProducts = [
   ),
 ];
 List<ProductModel> kidsProducts = [
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/dbbT6PA.png",
     title: "Green Poplin Ruched Front",
     brandName: "Lipsy london",
@@ -210,19 +220,19 @@ List<ProductModel> kidsProducts = [
     priceAfetDiscount: 590.36,
     dicountpercent: 24,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/7fSxC7k.png",
     title: "Printed Sleeveless Tiered Swing Dress",
     brandName: "Lipsy london",
     price: 650.62,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/pXnYE9Q.png",
     title: "Ruffle-Sleeve Ponte-Knit Sheath ",
     brandName: "Lipsy london",
     price: 400,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/V1MXgfa.png",
     title: "Green Mountain Beta Warehouse",
     brandName: "Lipsy london",
@@ -230,13 +240,13 @@ List<ProductModel> kidsProducts = [
     priceAfetDiscount: 360,
     dicountpercent: 20,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/8gvE5Ss.png",
     title: "Printed Sleeveless Tiered Swing Dress",
     brandName: "Lipsy london",
     price: 654,
   ),
-  ProductModel(
+  ProductModel.fromMock(
     image: "https://i.imgur.com/cBvB5YB.png",
     title: "Mountain Beta Warehouse",
     brandName: "Lipsy london",

@@ -17,13 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
-  late GlobalKey _formWidgetKey;
-
-  @override
-  void initState() {
-    super.initState();
-    _formWidgetKey = GlobalKey();
-  }
+  final GlobalKey _formWidgetKey = GlobalKey();
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -164,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
 
-                  SignUpForm(formKey: _formKey, formWidgetKey: _formWidgetKey),
+                  SignUpForm(key: _formWidgetKey, formKey: _formKey, formWidgetKey: _formWidgetKey),
                   const SizedBox(height: defaultPadding),
                   Row(
                     children: [
