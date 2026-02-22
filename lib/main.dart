@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:aivo/core/localization/localization_provider.dart';
 import 'package:aivo/route/route_constants.dart';
 import 'package:aivo/route/router.dart' as router;
 import 'package:aivo/theme/app_theme.dart';
+import 'package:aivo/utils/db_explorer.dart';
+import 'package:aivo/services/supabase_auth_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Supabase
+  await dotenv.load();
+  final supabaseUrl = dotenv.env['SUPABASE_URL']!;
+  final supabaseKey = dotenv.env['SUPABASE_PUBLISH_KEY']!;
+
+  await Supabase.initialize(
+    url: supabaseUrl,
+    anonKey: supabaseKey,
+  );
+
+  // Initialize Auth Service
+  final authService = SupabaseAuthService();
+  await authService.init();
+
+  // Explore database structure
+  await exploreSupabase();
+
   runApp(const MyApp());
 }
 
@@ -43,6 +65,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // Determine initial route based on auth state and first launch
+    final authService = SupabaseAuthService();
+    String initialRoute = onbordingScreenRoute;
+
+    if (!authService.isFirstLaunch) {
+      initialRoute = entryPointScreenRoute;
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'AIVO - E-Commerce App',
@@ -56,7 +86,7 @@ class _MyAppState extends State<MyApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       onGenerateRoute: router.generateRoute,
-      initialRoute: onbordingScreenRoute,
+      initialRoute: initialRoute,
     );
   }
 }

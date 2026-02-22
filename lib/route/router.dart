@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aivo/entry_point.dart';
+import 'package:aivo/services/supabase_auth_service.dart';
 
 import 'screen_export.dart';
 
@@ -57,6 +58,28 @@ import 'screen_export.dart';
 // EmptyPaymentScreen()
 // GetHelpScreen()
 
+/// Helper function to determine initial route
+String _getInitialRoute() {
+  final authService = SupabaseAuthService();
+
+  // Check first launch
+  if (authService.isFirstLaunch) {
+    return onbordingScreenRoute;
+  }
+
+  // Check if logged in
+  if (authService.isLoggedIn) {
+    return entryPointScreenRoute;
+  }
+
+  // Check if user skipped auth
+  if (authService.hasSkippedInitialAuth) {
+    return entryPointScreenRoute;
+  }
+
+  // Default to entry point (can browse without login)
+  return entryPointScreenRoute;
+}
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

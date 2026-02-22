@@ -4,24 +4,115 @@ import 'package:aivo/components/list_tile/divider_list_tile.dart';
 import 'package:aivo/components/network_image_with_loader.dart';
 import 'package:aivo/constants.dart';
 import 'package:aivo/route/screen_export.dart';
+import 'package:aivo/services/supabase_auth_service.dart';
 
 import 'components/profile_card.dart';
 import 'components/profile_menu_item_list_tile.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late SupabaseAuthService _authService;
+  bool _isLoggedIn = false;
+  String _userEmail = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = SupabaseAuthService();
+    _checkAuthStatus();
+  }
+
+  void _checkAuthStatus() {
+    setState(() {
+      _isLoggedIn = _authService.isLoggedIn;
+      _userEmail = _authService.userEmail ?? 'user@aivo.app';
+    });
+  }
+
+  Future<void> _handleLogout() async {
+    try {
+      await _authService.logout();
+      if (!mounted) return;
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Logged out successfully'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      _checkAuthStatus();
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Logout failed: $e'),
+          backgroundColor: errorColor,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleLogin() async {
+    await Navigator.pushNamed(context, logInScreenRoute);
+    _checkAuthStatus();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // If not logged in, show login prompt
+    if (!_isLoggedIn) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                "assets/icons/Profile.svg",
+                height: 80,
+                width: 80,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).iconTheme.color!.withOpacity(0.3),
+                  BlendMode.srcIn,
+                ),
+              ),
+              const SizedBox(height: defaultPadding),
+              Text(
+                "You need to login",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: defaultPadding / 2),
+              const Text(
+                "Sign in to access your profile and personalized features",
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: defaultPadding * 2),
+              ElevatedButton(
+                onPressed: _handleLogin,
+                child: const Text("LOGIN"),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // If logged in, show full profile
     return Scaffold(
       body: ListView(
         children: [
           ProfileCard(
-            name: "User",
-            email: "user@aivo.app",
+            name: _userEmail.split('@')[0],
+            email: _userEmail,
             imageSrc: "https://i.imgur.com/IXnwbLk.png",
-            // proLableText: "Sliver",
-            // isPro: true, if the user is pro
             press: () {
               Navigator.pushNamed(context, userInfoScreenRoute);
             },
@@ -156,7 +247,7 @@ class ProfileScreen extends StatelessWidget {
 
           // Log Out
           ListTile(
-            onTap: () {},
+            onTap: _handleLogout,
             minLeadingWidth: 24,
             leading: SvgPicture.asset(
               "assets/icons/Logout.svg",
