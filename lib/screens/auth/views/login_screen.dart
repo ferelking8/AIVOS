@@ -16,13 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
-  late GlobalKey<_LogInFormState> _formWidgetKey;
-
-  @override
-  void initState() {
-    super.initState();
-    _formWidgetKey = GlobalKey<_LogInFormState>();
-  }
+  final GlobalKey _formWidgetKey = GlobalKey();
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -49,8 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    final email = _formWidgetKey.currentState?.email ?? '';
-    final password = _formWidgetKey.currentState?.password ?? '';
+    final state = _formWidgetKey.currentState as dynamic;
+    final email = state?.email ?? '';
+    final password = state?.password ?? '';
 
     if (email.isEmpty || password.isEmpty) {
       _showErrorSnackBar('Please fill in all fields');
