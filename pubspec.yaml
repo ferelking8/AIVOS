@@ -46,7 +46,6 @@ flutter:
     - assets/flags/
     - assets/logo/
     - assets/screens/
-    - .env
 
   fonts:
     - family: Plus Jakarta
