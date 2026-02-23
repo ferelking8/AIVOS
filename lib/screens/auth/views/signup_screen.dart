@@ -17,6 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
+  bool _termsAccepted = false;
   final GlobalKey _formWidgetKey = GlobalKey();
 
   void _showErrorSnackBar(String message) {
@@ -41,6 +42,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> _handleSignUp() async {
     if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    if (!_termsAccepted) {
+      _showErrorSnackBar('You must accept the terms and conditions');
       return;
     }
 
@@ -164,8 +170,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Row(
                     children: [
                       Checkbox(
-                        onChanged: (value) {},
-                        value: false,
+                        onChanged: (value) {
+                          setState(() {
+                            _termsAccepted = value ?? false;
+                          });
+                        },
+                        value: _termsAccepted,
                       ),
                       Expanded(
                         child: Text.rich(
