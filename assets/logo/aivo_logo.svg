@@ -1,0 +1,24 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="#5C5FFF" rx="40"/>
+
+  <!-- Shopping bag icon -->
+  <g transform="translate(100, 60)">
+    <!-- Bag body -->
+    <path d="M -30 -10 L -30 30 Q -30 40 -20 40 L 20 40 Q 30 40 30 30 L 30 -10 Z" fill="white" stroke="white" stroke-width="2"/>
+
+    <!-- Bag handle -->
+    <path d="M -25 -10 Q -25 -25 0 -25 Q 25 -25 25 -10" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Shopping item inside -->
+    <circle cx="-10" cy="15" r="6" fill="#5C5FFF"/>
+    <circle cx="10" cy="15" r="6" fill="#5C5FFF"/>
+    <circle cx="0" cy="25" r="5" fill="#5C5FFF" opacity="0.7"/>
+  </g>
+
+  <!-- App name -->
+  <text x="100" y="155" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">AIVO</text>
+
+  <!-- Tagline -->
+  <text x="100" y="180" font-family="Arial, sans-serif" font-size="10" fill="rgba(255,255,255,0.8)" text-anchor="middle" letter-spacing="2">E-COMMERCE</text>
+</svg>
