@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aivo/services/logger_service.dart';
 
 class SupabaseAuthService {
   static final SupabaseAuthService _instance = SupabaseAuthService._internal();
@@ -36,12 +37,17 @@ class SupabaseAuthService {
     required String password,
   }) async {
     try {
+      final logger = LoggerService();
+      logger.i('🔐 Attempting login for: $email');
       final response = await _supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
+      logger.i('✅ Login successful for: $email');
       return response;
     } catch (e) {
+      final logger = LoggerService();
+      logger.e('❌ Login failed: $e', e);
       rethrow;
     }
   }
@@ -52,12 +58,17 @@ class SupabaseAuthService {
     required String password,
   }) async {
     try {
+      final logger = LoggerService();
+      logger.i('📝 Attempting signup for: $email');
       final response = await _supabase.auth.signUp(
         email: email,
         password: password,
       );
+      logger.i('✅ Signup successful for: $email');
       return response;
     } catch (e) {
+      final logger = LoggerService();
+      logger.e('❌ Signup failed: $e', e);
       rethrow;
     }
   }
